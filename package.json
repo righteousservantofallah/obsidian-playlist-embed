@@ -1,0 +1,17 @@
+{
+  "name": "youtube-playlist-player",
+  "version": "1.0.1",
+  "description": "Watch YouTube playlists inside Obsidian notes.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "esbuild": "^0.21.5",
+    "obsidian": "latest",
+    "typescript": "^5.4.0"
+  }
+}

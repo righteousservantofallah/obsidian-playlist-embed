@@ -1,0 +1,395 @@
+/* YouTube Playlist Player
+   Uses Obsidian's theme variables, so it follows whatever theme and color scheme you run. */
+
+.ytpl-root {
+	width: 100%;
+	margin: var(--size-4-2) 0;
+}
+
+.ytpl-root.is-fill {
+	height: 100%;
+	margin: 0;
+}
+
+/* ---- layout: video on the left, list on the right ---------------------- */
+
+.ytpl-root .ytpl {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) var(--ytpl-list-width, 340px);
+	gap: var(--size-4-3);
+	width: 100%;
+}
+
+.ytpl-root.is-fill .ytpl {
+	height: 100%;
+	align-content: start;
+}
+
+.ytpl-root .ytpl.is-stacked {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.ytpl-root .ytpl.is-stacked .ytpl-side {
+	height: 380px;
+}
+
+.ytpl-root.is-fill .ytpl.is-stacked {
+	grid-template-rows: auto minmax(0, 1fr);
+}
+
+.ytpl-root.is-fill .ytpl.is-stacked .ytpl-side {
+	height: auto;
+	min-height: 200px;
+}
+
+/* ---- player column ------------------------------------------------------ */
+
+.ytpl-stage {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-2);
+	min-width: 0;
+}
+
+.ytpl-screen {
+	position: relative;
+	aspect-ratio: 16 / 9;
+	background: #000;
+	border-radius: var(--radius-m);
+	overflow: hidden;
+}
+
+.ytpl-screen .ytpl-iframe {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+.ytpl-placeholder {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--size-4-3);
+	color: #fff;
+	font-size: var(--font-ui-medium);
+}
+
+.ytpl-now {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+
+.ytpl-now-title {
+	font-size: var(--font-ui-medium);
+	font-weight: var(--font-semibold);
+	line-height: var(--line-height-tight);
+	color: var(--text-normal);
+}
+
+.ytpl-now-channel {
+	font-size: var(--font-ui-small);
+	color: var(--text-muted);
+}
+
+.ytpl-now-channel:empty,
+.ytpl-hint:empty {
+	display: none;
+}
+
+.ytpl-hint {
+	margin-top: var(--size-4-1);
+	padding: var(--size-4-2);
+	font-size: var(--font-ui-small);
+	color: var(--text-error);
+	border-left: 2px solid var(--text-error);
+	border-radius: var(--radius-s);
+}
+
+.ytpl-controls {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: var(--size-4-1);
+}
+
+.ytpl-controls .ytpl-spacer {
+	flex: 1;
+}
+
+.ytpl-root .ytpl-chip {
+	height: auto;
+	padding: 3px var(--size-4-3);
+	font-size: var(--font-ui-smaller);
+	border-radius: var(--radius-l);
+	background: var(--background-modifier-hover);
+	color: var(--text-muted);
+	box-shadow: none;
+}
+
+.ytpl-root .ytpl-chip:hover {
+	background: var(--background-modifier-active-hover);
+	color: var(--text-normal);
+	box-shadow: none;
+}
+
+.ytpl-root .ytpl-chip.is-active {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+/* ---- list column ---------------------------------------------------------
+   The list is positioned absolutely inside .ytpl-side so its height always
+   matches the video column instead of stretching the row. */
+
+.ytpl-side {
+	position: relative;
+	min-height: 0;
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-m);
+	overflow: hidden;
+}
+
+.ytpl-side-inner {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.ytpl-side-head {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-2);
+	padding: var(--size-4-2) var(--size-4-3);
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.ytpl-side-top {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+}
+
+.ytpl-side-heading {
+	flex: 1;
+	min-width: 0;
+}
+
+.ytpl-side-title {
+	font-weight: var(--font-semibold);
+	font-size: var(--font-ui-small);
+	color: var(--text-normal);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.ytpl-side-count {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
+.ytpl-side-note {
+	margin-top: 2px;
+	font-size: var(--font-ui-smaller);
+	color: var(--text-warning, var(--text-muted));
+}
+
+.ytpl-root .ytpl-search {
+	width: 100%;
+	height: var(--input-height);
+	font-size: var(--font-ui-small);
+}
+
+.ytpl-list {
+	position: relative;
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	padding: var(--size-4-1);
+}
+
+.ytpl-empty {
+	padding: var(--size-4-4);
+	color: var(--text-muted);
+	font-size: var(--font-ui-small);
+	text-align: center;
+}
+
+.ytpl-root .ytpl-item {
+	display: grid;
+	grid-template-columns: 22px 112px minmax(0, 1fr);
+	gap: var(--size-4-2);
+	align-items: center;
+	width: 100%;
+	height: auto;
+	padding: var(--size-4-1) var(--size-4-2) var(--size-4-1) var(--size-4-1);
+	text-align: left;
+	font-weight: var(--font-normal);
+	color: var(--text-normal);
+	background: transparent;
+	border: 0;
+	border-radius: var(--radius-s);
+	box-shadow: none;
+	cursor: pointer;
+}
+
+.ytpl-root .ytpl.is-stacked .ytpl-item {
+	grid-template-columns: 22px 96px minmax(0, 1fr);
+}
+
+.ytpl-root .ytpl-item:hover {
+	background: var(--background-modifier-hover);
+	box-shadow: none;
+}
+
+.ytpl-root .ytpl-item:focus-visible {
+	box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+}
+
+.ytpl-root .ytpl-item.is-current {
+	background: var(--background-modifier-active-hover);
+	box-shadow: inset 3px 0 0 var(--interactive-accent);
+}
+
+.ytpl-root .ytpl-item.is-unavailable {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.ytpl-root .is-hidden {
+	display: none;
+}
+
+.ytpl-index {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: var(--font-ui-smaller);
+	color: var(--text-faint);
+	font-variant-numeric: tabular-nums;
+}
+
+.ytpl-item.is-current .ytpl-index {
+	color: var(--interactive-accent);
+}
+
+.ytpl-index .svg-icon {
+	width: 14px;
+	height: 14px;
+}
+
+.ytpl-thumb {
+	position: relative;
+	aspect-ratio: 16 / 9;
+	background: var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	overflow: hidden;
+}
+
+.ytpl-thumb img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.ytpl-dur {
+	position: absolute;
+	right: 3px;
+	bottom: 3px;
+	padding: 0 4px;
+	font-size: 11px;
+	line-height: 16px;
+	font-variant-numeric: tabular-nums;
+	color: #fff;
+	background: rgba(0, 0, 0, 0.8);
+	border-radius: 3px;
+}
+
+.ytpl-meta {
+	min-width: 0;
+}
+
+.ytpl-title {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	font-size: var(--font-ui-small);
+	line-height: var(--line-height-tight);
+}
+
+.ytpl-item.is-current .ytpl-title {
+	font-weight: var(--font-semibold);
+}
+
+.ytpl-channel {
+	margin-top: 2px;
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* ---- messages ------------------------------------------------------------ */
+
+.ytpl-message {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--size-4-2);
+	padding: var(--size-4-4);
+	color: var(--text-muted);
+	border: 1px dashed var(--background-modifier-border);
+	border-radius: var(--radius-m);
+}
+
+.ytpl-message.is-error strong {
+	color: var(--text-error);
+}
+
+.ytpl-message-actions {
+	display: flex;
+	gap: var(--size-4-2);
+}
+
+.ytpl-message-hint {
+	font-size: var(--font-ui-small);
+}
+
+/* ---- pane view ----------------------------------------------------------- */
+
+.view-content.ytpl-view {
+	padding: var(--size-4-2);
+	overflow: auto;
+}
+
+.ytpl-view-host {
+	height: 100%;
+}
+
+/* ---- modal --------------------------------------------------------------- */
+
+.ytpl-modal-input {
+	width: 100%;
+}
+
+.ytpl-modal-error {
+	margin-top: var(--size-4-2);
+	color: var(--text-error);
+	font-size: var(--font-ui-small);
+}
+
+.ytpl-modal-error:empty {
+	display: none;
+}

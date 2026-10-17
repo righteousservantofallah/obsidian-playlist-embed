@@ -1,4 +1,4 @@
-# Obsidian's YouTube Playlist Player
+# YouTube Playlist Player
 
 Watch a YouTube playlist inside your notes. Paste a playlist link and get a player with the full video list beside it, so you can pick any video without leaving Obsidian.
 
