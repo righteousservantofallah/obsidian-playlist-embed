@@ -1,9 +1,0 @@
-{
-  "id": "youtube-playlist-player",
-  "name": "YouTube Playlist Player",
-  "version": "1.0.1",
-  "minAppVersion": "1.10.3",
-  "description": "Paste a YouTube playlist link into a note and watch it with the video list beside the player.",
-  "author": "YOUR NAME",
-  "isDesktopOnly": false
-}
